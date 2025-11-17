@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS Contact Form</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f7f7f7;
+      font-family: sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    form {
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 500px;
+      padding: 2rem;
+      border-radius: 8px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 2px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      border: none;
+      background: #0077ff;
+      color: white;
+      padding: 0.7rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    output {
+      min-height: 1rem;
+      font-size: 0.9rem;
+    }
+
+    input:invalid,
+    textarea:invalid {
+        border-color: red;
+    }
+
+    .error { color: red; }
+    .info { color: green; }
+
+    :root {
+        --bg: #f7f7f7;
+        --card: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --accent: #0077ff;
+        --error: #b91c1c;
+        --success: #0f8644;
+    }
+
+    [data-theme="dark"] {
+        --bg: #0b1220;
+        --card: #071027;
+        --text: #e6eef8;
+        --muted: #94a3b8;
+        --accent: #4ea8ff;
+        --error: #ff8a8a;
+        --success: #6ee7b7;
+    }
+
+    .theme-toggle {
+        background: none;
+        border: 2px solid var(--accent);
+        color: var(--accent);
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+    <div id="site-controls" style="display:none; margin-bottom:1rem;">
+        <button id="themeToggle" class="theme-toggle" aria-pressed="false">Dark</button>
+    </div>
+
+    <div id="vt-demo" style="margin:1rem 0;">
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+            <button id="vt-to-a">Short</button>
+            <button id="vt-to-b">Long</button>
+        </div>
+
+        <div id="vt-container" style="margin-top:0.75rem; border-radius:6px; padding:1rem;">
+            <div id="view-a" class="vt-view">
+            <h3>Short</h3>
+            <p>Welcome to my Contact Form!</p>
+            </div>
+        </div>
+    </div>
+
+    <form action="https://httpbin.org/post" method="POST" id="myForm" novalidate>
+        <div>
+        <label for="name">Name <span aria-hidden="true">*</span></label>
+        <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            required 
+            minlength="1"
+            maxlength="50"
+            placeholder="first and last name"
+        />
+        </div>
+
+        <div>
+        <label for="email">Email <span aria-hidden="true">*</span></label>
+        <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required
+            minlength="2"
+            maxlength="50"
+            placeholder="you@example.com"
+        />
+        </div>
+
+        <div>
+        <label for="comments">Comments</label>
+        <textarea 
+            id="comments" 
+            name="comments" 
+            rows="5"
+            minlength="0"
+            maxlength="150"
+            placeholder="Type your message here..."
+        ></textarea>
+        </div>
+
+        <input type="hidden" name="possible_bot" value="true" />
+        <input type="hidden" name="form-errors" value="">
+
+        <output id="error" class="error"></output>
+        <output id="info" class="info"></output>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <noscript>
+        <div style="color:var(--muted); margin-bottom:1rem;">
+            Theme toggle is available when JavaScript is enabled.
+        </div>
+    </noscript>
+
+  <script>
+    const controls = document.getElementById('site-controls');
+    const themeToggle = document.getElementById('themeToggle');
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.textContent = 'Light';
+            themeToggle.setAttribute('aria-pressed', 'true');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            themeToggle.textContent = 'Dark';
+            themeToggle.setAttribute('aria-pressed', 'false');
+        }
+    }
+
+    if (controls && themeToggle) {
+        controls.style.display = ''; 
+
+        const saved = localStorage.getItem('site-theme');
+        const defaultTheme = saved || 'light';
+        applyTheme(defaultTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            const next = cur === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            localStorage.setItem('site-theme', next);
+        });
+    }
+
+    const vtContainer = document.getElementById('vt-container');
+    const btnA = document.getElementById('vt-to-a');
+    const btnB = document.getElementById('vt-to-b');
+
+    function setView(html) {
+        if (document.startViewTransition) {
+            document.startViewTransition(() => {
+                vtContainer.innerHTML = html;
+            });
+        } else {
+            vtContainer.innerHTML = html;
+        }
+    }
+
+    btnA.addEventListener('click', () => {
+        setView(`
+            <div id="view-a" class="vt-view">
+            <h3>Short</h3>
+            <p>Welcome to my Contact Form!</p>
+            </div>
+        `);
+    });
+
+    btnB.addEventListener('click', () => {
+        setView(`
+            <div id="view-b" class="vt-view">
+            <h3>Long</h3>
+            <p>Hi! I'm Jenny and this is my contact form. Reach out with a message and your email and I will get back to you shortly.</p>
+            </div>
+        `);
+    });
+
+
+
+    const form = document.getElementById("myForm");
+    const errorOutput = document.getElementById("error");
+    const infoOutput = document.getElementById("info");
+
+    form.name.addEventListener("input", (e) => {
+        const allowed = /^[A-Za-z .'-]*$/;
+        if (!allowed.test(e.target.value)) {
+            e.target.style.borderColor = "red";
+            errorOutput.textContent = "Illegal character typed in name!";
+
+            setTimeout(() => {
+            e.target.style.borderColor = "";
+            errorOutput.textContent = "";
+            }, 800);
+
+            e.target.value = e.target.value.slice(0, -1);
+        }
+    });
+
+    const comments = form.comments;
+    const maxLen = comments.getAttribute("maxlength");
+
+    comments.addEventListener("input", () => {
+        const remaining = maxLen - comments.value.length;
+        infoOutput.textContent = `Characters left: ${remaining}`;
+
+        if (remaining <= 50) {
+            infoOutput.style.color = "orange";
+        } else {
+            infoOutput.style.color = "green";
+        }
+    });
+
+    let form_errors = [];
+
+    form.addEventListener("submit", (e) => {
+
+        form.name.setCustomValidity("");
+        form.email.setCustomValidity("");
+        form.comments.setCustomValidity("");
+
+        console.log("submit");
+        e.preventDefault(); 
+
+        errorOutput.textContent = "";
+        infoOutput.textContent = "";
+
+        let errors = [];
+        ["name", "email", "comments"].forEach(id => {
+            form[id].addEventListener("input", () => {
+                form[id].setCustomValidity("");
+                form[id].checkValidity();  
+                if (form.name.checkValidity() && form.email.checkValidity() && form.comments.checkValidity()) {
+                    errorOutput.textContent = "";
+                }
+            });
+        });
+
+        if (!form.name.checkValidity()) {
+            console.log("name field is invalid");
+            const msg = "Name field is invalid";
+            form.name.setCustomValidity(msg);
+            errors.push(msg);
+
+            form_errors.push({
+                field: "name",
+                value: form.name.value,
+                message: msg
+            });
+        } else {
+            form.name.setCustomValidity("");
+        }
+
+        if (!form.email.checkValidity()) {
+            console.log("email field is invalid");
+            const msg = "Email field is invalid";
+            form.email.setCustomValidity(msg);
+            errors.push(msg);
+
+            form_errors.push({
+                field: "email",
+                value: form.email.value,
+                message: msg
+            });
+        } else {
+            form.email.setCustomValidity("");
+        }
+
+        if (!form.comments.checkValidity()) {
+            console.log("comments field is invalid");
+            const msg = "Comments field is invalid";
+            form.comments.setCustomValidity(msg);
+            errors.push(msg);
+
+            form_errors.push({
+                field: "comments",
+                value: form.comments.value,
+                message: msg
+            });
+        } else {
+            form.comments.setCustomValidity("");
+        }
+
+        if (errors.length > 0) {
+            errorOutput.textContent = errors.join(" ");
+            return;
+        }
+
+        form.querySelector('[name="form-errors"]').value =
+            JSON.stringify(form_errors);
+
+        infoOutput.textContent = "Form submitted successfully!";
+        form.submit();
+    });
+
+
+
+  </script>
+
+</body>
+</html>
