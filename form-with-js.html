@@ -3,20 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
   <title>JS Contact Form</title>
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      padding: 2rem;
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
+      margin: 0;
+      padding: 0;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #f7f7f7;
+      background: var(--bg); 
       font-family: sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      display: flex;
+      flex-direction: column;
     }
 
     form {
@@ -85,90 +95,108 @@
         --success: #6ee7b7;
     }
 
-    .theme-toggle {
+    .theme-selector {
         background: none;
         border: 2px solid var(--accent);
         color: var(--accent);
-        padding: 0.4rem 0.6rem;
+        padding: 1rem 0.6rem;
         border-radius: 6px;
         cursor: pointer;
+        margin: 1rem;
     }
 
   </style>
 </head>
 <body>
-    <div id="theme-selector" style="margin-bottom: 1rem;">
-        <label for="themePick">Pick Theme and Colors:</label>
-        <select id="themePick">
-            <option value="Light">Light Mode</option>
-            <option value="Dark">Dark Mode</option>
-            <option value="Purple">Purple Mode</option>
-            <option value="Orange">Orange Mode</option>
-        </select>
-    </div>
 
-
-    <div id="vt-demo" style="margin:1rem 0;">
-        <div style="display:flex; gap:0.5rem; align-items:center;">
-            <button id="vt-to-a">Short</button>
-            <button id="vt-to-b">Long</button>
+     <header>
+        <nav aria-label="Primary">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="experiences.html">Experience</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="experiments.html">Experiments</a></li>
+            <li><a href="form-no-js.html">Form No JS</a></li>
+            <li><a href="form-with-js.html">Form With JS</a></li>
+        </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="theme-selector" class="theme-selector" style="margin-bottom: 1rem;">
+            <label for="themePick">Pick Theme and Colors:</label>
+            <select id="themePick">
+                <option value="Light">Light Mode</option>
+                <option value="Dark">Dark Mode</option>
+                <option value="Purple">Purple Mode</option>
+                <option value="Orange">Orange Mode</option>
+            </select>
         </div>
 
-        <div id="vt-container" style="margin-top:0.75rem; border-radius:6px; padding:1rem;">
-            <div id="view-a" class="vt-view">
-            <h3>Short</h3>
-            <p>Welcome to my Contact Form!</p>
+
+        <div id="vt-demo" style="margin:1rem 0;">
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <button id="vt-to-a">Short</button>
+                <button id="vt-to-b">Long</button>
+            </div>
+
+            <div id="vt-container" style="margin-top:0.75rem; border-radius:6px; padding:1rem;">
+                <div id="view-a" class="vt-view">
+                <h3>Short</h3>
+                <p>Welcome to my Contact Form!</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <form action="https://httpbin.org/post" method="POST" id="myForm" novalidate>
-        <div>
-        <label for="name">Name <span aria-hidden="true">*</span></label>
-        <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            required 
-            minlength="1"
-            maxlength="50"
-            placeholder="first and last name"
-        />
-        </div>
+        <form action="https://httpbin.org/post" method="POST" id="myForm" novalidate>
+            <div>
+            <label for="name">Name <span aria-hidden="true">*</span></label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                required 
+                minlength="1"
+                maxlength="50"
+                placeholder="first and last name"
+            />
+            </div>
 
-        <div>
-        <label for="email">Email <span aria-hidden="true">*</span></label>
-        <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            required
-            minlength="2"
-            maxlength="50"
-            placeholder="you@example.com"
-        />
-        </div>
+            <div>
+            <label for="email">Email <span aria-hidden="true">*</span></label>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                minlength="2"
+                maxlength="50"
+                placeholder="you@example.com"
+            />
+            </div>
 
-        <div>
-        <label for="comments">Comments</label>
-        <textarea 
-            id="comments" 
-            name="comments" 
-            rows="5"
-            minlength="0"
-            maxlength="150"
-            placeholder="Type your message here..."
-        ></textarea>
-        </div>
+            <div>
+            <label for="comments">Comments</label>
+            <textarea 
+                id="comments" 
+                name="comments" 
+                rows="5"
+                minlength="0"
+                maxlength="150"
+                placeholder="Type your message here..."
+            ></textarea>
+            </div>
 
-        <input type="hidden" name="possible_bot" value="true" />
-        <input type="hidden" name="form-errors" value="">
+            <input type="hidden" name="possible_bot" value="true" />
+            <input type="hidden" name="form-errors" value="">
 
-        <output id="error" class="error"></output>
-        <output id="info" class="info"></output>
+            <output id="error" class="error"></output>
+            <output id="info" class="info"></output>
 
-        <button type="submit">Submit</button>
-    </form>
+            <button type="submit">Submit</button>
+        </form>
+    </main>
 
     <noscript>
         <div style="color:var(--muted); margin-bottom:1rem;">

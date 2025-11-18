@@ -3,16 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
   <title>No JS Contact Form</title>
   <style>
     body {
+        margin: 0;
+        min-height: 100vh;
+        background: #f7f7f7;
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main {
       margin: 0;
+      padding: 0;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       background: #f7f7f7;
       font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
     }
 
     form {
@@ -63,54 +76,70 @@
   </style>
 </head>
 <body>
+    <header>
+        <nav aria-label="Primary">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="experiences.html">Experience</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="experiments.html">Experiments</a></li>
+            <li><a href="form-no-js.html">Form No JS</a></li>
+            <li><a href="form-with-js.html">Form With JS</a></li>
+        </ul>
+        </nav>
+    </header>
+    <main>
+        <form action="https://httpbin.org/post" method="POST">
+            <div>
+            <label for="name">Name <span aria-hidden="true">*</span></label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                required 
+                minlength="1"
+                maxlength="50"
+                pattern="[A-Za-z .'-]+"
+                placeholder="first and last name"
+            />
+            </div>
 
-  <form action="https://httpbin.org/post" method="POST">
-    <div>
-      <label for="name">Name <span aria-hidden="true">*</span></label>
-      <input 
-        type="text" 
-        id="name" 
-        name="name" 
-        required 
-        minlength="1"
-        maxlength="50"
-        pattern="[A-Za-z .'-]+"
-        placeholder="first and last name"
-      />
-    </div>
+            <div>
+            <label for="email">Email <span aria-hidden="true">*</span></label>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                minlength="2"
+                maxlength="50"
+                placeholder="you@example.com"
+            />
+            </div>
 
-    <div>
-      <label for="email">Email <span aria-hidden="true">*</span></label>
-      <input 
-        type="email" 
-        id="email" 
-        name="email" 
-        required
-        minlength="2"
-        maxlength="50"
-        placeholder="you@example.com"
-      />
-    </div>
+            <div>
+            <label for="comments">Comments</label>
+            <textarea 
+                id="comments" 
+                name="comments" 
+                rows="5"
+                minlength="0"
+                maxlength="500"
+                placeholder="Type your message here..."
+            ></textarea>
+            </div>
 
-    <div>
-      <label for="comments">Comments</label>
-      <textarea 
-        id="comments" 
-        name="comments" 
-        rows="5"
-        minlength="0"
-        maxlength="500"
-        placeholder="Type your message here..."
-      ></textarea>
-    </div>
+            <input type="hidden" name="possible_bot" value="true" />
 
-    <input type="hidden" name="possible_bot" value="true" />
+            <output id="error" class="error"></output>
+            <output id="info" class="info"></output>
 
-    <output id="error" class="error"></output>
-    <output id="info" class="info"></output>
+            <button type="submit">Submit</button>
+        </form>
 
-    <button type="submit">Submit</button>
-  </form>
+    </main>
 
 </body>
 </html>
